@@ -1,0 +1,89 @@
+.schedule_quickfix_check {
+  border-radius: 50%;
+}
+
+.schedule_quickfix_todo {
+  border-radius: 8px;
+  &:hover {
+    background: $color_surface0;
+  }
+  color: $color_text;
+  &.finished {
+    color: $color_surface1;
+  }
+}
+
+.schedule_quickfix_schedule {
+  border-radius: 12px;
+  background: $color_mantle;
+}
+
+.schedule_quickfix_weekday {
+  background: rgba($color_blue, $alpha);
+  border-radius: 50%;
+}
+
+.schedule_quickfix_weather {
+  border-radius: 6px;
+  &:hover {
+    background: $color_surface0;
+  }
+}
+
+.schedule_quickfix_date {
+  font-size: 18px;
+  color: $color_text
+}
+
+.schedule_quickfix_clock_number {
+  font-size: 50px;
+  color: $color_text
+}
+
+.schedule_quickfix_clock_seperator {
+  font-size: 50px;
+  color: $color_subtext0
+}
+
+.quickfix_scale trough, .quickfix_progress trough {
+  highlight, progress {
+    min-height: 10px;
+    border-radius: 12px;
+  }
+  min-height: 10px;
+  border-radius: 12px;
+}
+
+.quickfix_list_icon {
+  border-radius: 50%;
+  background: rgba($color_surface1, $alpha);
+}
+
+.quickfix_list_entry {
+  border-radius: 8px;
+  &:hover {
+    background: rgba($color_surface0, $alpha);
+  }
+}
+
+.quickfix_icon {
+  color: $color_subtext0;
+  &:hover {
+    color: $color_text;
+  }
+}
+
+.quickfix_heading {
+  padding: 5px 8px;
+}
+
+.quickfix_menu {
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba($color_crust, $alpha);
+}
+
+.schedule_quickfix_calendar {
+  background: rgba($color_mantle, $alpha);
+  border-radius: 8px;
+}

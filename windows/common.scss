@@ -1,0 +1,82 @@
+$font-family: serif;
+$alpha: 1.0;
+
+* {
+  all: unset;
+  font-family: 'serif';
+}
+
+trough {
+  highlight, progress {
+    min-height: 1px;
+    min-width: 1px;
+    background: $color_subtext1;
+  }
+  min-height: 1px;
+  min-width: 1px;
+  background: $color_surface0;
+  &:hover {
+    highlight {
+      background: $color_text;
+    }
+    background: $color_surface1;
+  }
+}
+
+calendar {
+  :selected {
+    background: rgba($color_blue, $alpha);
+    border-radius: 10px;
+  }
+  color: rgba($color_text, $alpha);
+}
+
+.text {
+  color: rgba($color_text, $alpha);
+}
+
+.subtext0 {
+  color: rgba($color_subtext0, $alpha);
+}
+
+.subtext1 {
+  color: rgba($color_subtext1, $alpha);
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.bg_enable {
+  background: rgba($color_blue, $alpha);
+}
+
+.checkbutton {
+  color: rgba($color_subtext1, $alpha);
+  border: 1px solid $color_subtext0;
+  &:hover {
+    color: rgba($color_text, $alpha);
+    border: 1px solid $color_text;
+    background: $color_surface1;
+  }
+}
+
+.seperator {
+  background: $color_subtext1;
+}
+
+.switch {
+  border: 2px solid $color_subtext0;
+  &:hover {
+    border-color: $color_text;
+  }
+}
+
+.switch_circle {
+  border-radius: 50%;
+  background: $color_text;
+}

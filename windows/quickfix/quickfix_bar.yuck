@@ -1,0 +1,134 @@
+(defwidget quickfix_option [info ?class]
+  (widget
+    :info {info}
+    :class 'quickfix_option ${class}'
+    :onclick true
+    (label :class 'text' :width 30 :style {info.style} :text {info.icon}))
+)
+
+(defwidget battery_quickfix [info ?class]
+  (widget
+    :info {info}
+    :class 'quickfix_option ${class}'
+    :onclick true
+    (box
+      :orientation 'h'
+      :space-evenly false
+      :style 'padding: 0px 5px'
+      (overlay
+        :valign 'center'
+        (progress
+          :class 'battery ${info.status}'
+          :width 32
+          :min 0
+          :max 100
+          :value {info.value})
+        (label :class 'heading' :text {info.icon}))
+      (box :class 'battery_head' :width 2 :height 8 :valign 'center')))
+)
+
+(defwidget power_button [info]
+  (widget
+    :info {info}
+    :class 'power_button'
+    :onclick true
+    (label :width 20 :height 20 :style 'font-size: 12px; padding-right: 3px;' :text ''))
+)
+
+(defwidget power_quickfix [info]
+  (widget
+    :info {info[0]}
+    :transition 'slidedown'
+    (box
+      :height 30
+      :class 'quickfix_pane'
+      :orientation 'h'
+      :space-evenly false
+      (box :style 'padding: 5px' (power_button :info {info[1]}))
+      (battery_quickfix :class 'last' :info {info[2]})))
+)
+
+(defwidget schedule_quickfix [info]
+  (box
+    :height 30
+    :class 'quickfix_pane'
+    (widget
+      :info {info}
+      :class 'quickfix_option first last'
+      :onclick true
+      (box
+        :width 90
+        :style 'padding: 5px 0px'
+        (box
+          :class 'quickfix_clock'
+          :halign 'center'
+          :space-evenly false
+          (label :class 'text' :style 'font-size: 12px;' :text "${info.hour}:${info.minute} ${info.period}")))))
+)
+
+(defwidget quickfix_option_list [info]
+  (widget
+    :info {info[0]}
+    :transition 'slidedown'
+    (box
+      :height 30
+      :orientation 'h'
+      :space-evenly false
+      :class 'quickfix_pane'
+      (quickfix_option :class 'first' :info {info[1]})
+      (quickfix_option :info {info[2]})
+      (quickfix_option :class 'last' :info {info[3]})))
+)
+
+(defwidget quickfix_notification [info]
+  (widget
+    :info {info[0]}
+    :transition 'slidedown'
+    (box
+      :height 30
+      :orientation 'h'
+      :space-evenly false
+      :class 'quickfix_pane'
+      (quickfix_option :class 'first last' :info {info[1]}))
+  )
+)
+
+(defwidget quickfix_left []
+  (box
+    :orientation 'h'
+    :space-evenly false
+    :spacing 5
+    (power_quickfix :info '[${info_8a51be}, ${info_73223f}, ${info_2f0d6d}]')
+    (schedule_quickfix :info {info_b8185c})
+    (quickfix_option_list :info '[${info_2ba3c6}, ${info_5c58bc}, ${info_e9901b}, ${info_1fb212}]'))
+)
+
+(defwidget quickfix_right []
+  (box
+    :orientation 'h'
+    :space-evenly false
+    :spacing 5
+    (quickfix_notification :info '[${info_b42231}, ${info_7b4589}]'))
+)
+
+(defwidget quickfix_bar []
+  (box
+    :style 'padding: 5px;'
+    (overlay
+      (box :halign 'start' (quickfix_left))
+      (box :halign 'end' (quickfix_right))))
+)
+
+(defwindow quickfix_bar
+  :monitor 1
+  :geometry (geometry
+              :x '0px'
+              :y '0px'
+              :width '100%'
+              :height '0px'
+              :anchor 'center top')
+  :stacking 'fg'
+  :focusable false
+  :exclusive true
+  (quickfix_bar)
+)

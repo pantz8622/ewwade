@@ -1,0 +1,57 @@
+.quickfix_option {
+  border-radius: 12px;
+  &.first {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+  }
+  &.last {
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+  }
+  &:hover {
+    background: rgba($color_surface0, $alpha);
+  }
+}
+
+.battery_head {
+  background: $color_surface1;
+}
+
+.battery {
+  trough {
+    progress {
+      min-height: 18px;
+      border-radius: 3px;
+    }
+    min-height: 18px;
+    border-radius: 3px;
+    background: $color_surface1;
+  }
+  &.normal trough progress {
+    background: $color_text;
+  }
+  &.warning trough progress{
+    background: $color_red;
+  }
+}
+
+.power_button {
+  color: white;
+  &:hover {
+    color: $color_green;
+  }
+  background: rgba($color_red, $alpha);
+  border-radius: 50%;
+  border: 1px solid;
+}
+
+.quickfix_pane {
+  border-radius: 18px;
+  background: $color_crust;
+}
+
+.quickfix_clock {
+  background: rgba($color_base, $alpha);
+  border-radius: 6px;
+  padding: 0px 5px;
+}

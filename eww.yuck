@@ -1,0 +1,4 @@
+(include 'variables.yuck')
+(include 'windows/common.yuck')
+(include 'windows/quickfix/quickfix_bar.yuck')
+(include 'windows/quickfix/quickfix_menu.yuck')

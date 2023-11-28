@@ -1,0 +1,115 @@
+(defwidget widget [info ?width ?height ?valign ?halign ?transition ?duration ?class ?active ?tooltip ?style ?cursor ?dragvalue ?dragtype ?onscroll ?onhover ?onhoverlost ?ondropped ?onclick ]
+  (box
+    :width {(width == '')? 0: width}
+    :height {(height == '')? 0: height}
+    :valign {(valign == '')? 'fill': valign}
+    :halign {(halign == '')? 'fill': halign}
+    (revealer
+      :transition {(transition == '')? 'none': transition}
+      :reveal {info.reveal}
+      :duration {(duration == '')? '500ms': duration}
+      :valign { (transition == 'slideup')? 'end': (transition == 'slidedown')? 'start': 'fill' }
+      :halign { (transition == 'slideleft')? 'end': (transition == 'slideright')? 'start': 'fill' }
+      (eventbox
+        :class {(class == '')? '': class}
+        :active {(active == '')? true: active}
+        :tooltip {(tooltip == '')? '': tooltip}
+        :cursor {(cursor == '')? 'default': cursor}
+        :dragvalue {(dragvalue == '')? '': dragvalue}
+        :dragtype {(dragtype == '')? '': dragtype}
+        :onscroll {(onscroll)? 'notify-send "wadectl scroll ${info.id}"': ''}
+        :onhover {(onhover)? 'notify-send "wadectl hover ${info.id}"': ''}
+        :onhoverlost {(onhoverlost)? 'notify-send "wadectl hoverlost ${info.id}"': ''}
+        :ondropped {(ondropped)? 'notify-send "wadectl drop ${info.id}"': ''} ;; not working ??
+        :onclick {(onclick)? 'notify-send "wadectl click ${info.id}"': ''}
+        :onmiddleclick {(onclick)? 'notify-send "wadectl middleclick ${info.id}"': ''}
+        :onrightclick {(onclick)? 'notify-send "wadectl rightclick ${info.id}"': ''}
+        :style {(style == '')? '': style}
+        (children))))
+)
+
+(defwidget switch_enable [size status]
+  (revealer
+    :transition 'crossfade'
+    :duration '300ms'
+    :reveal {status == 'on'}
+    (box :class 'bg_enable' :style 'border-radius: ${size*0.5}'))
+)
+
+(defwidget switch_circle [show_on status size]
+  (revealer
+    :transition 'crossfade'
+    :reveal {status == show_on}
+    :duration '300ms'
+    (box :halign {(show_on == 'on')? 'end': 'start'} :valign 'center' :width {size*0.8} :height {size*0.8} :class 'switch_circle'))
+)
+
+(defwidget switch [info ?valign ?halign ?transition ?duration ?class ?active ?tooltip ?style ?cursor ?dragvalue ?dragtype ?size]
+  (widget
+    :width {size*1.5}
+    :height {size}
+    :class 'switch ${class}'
+    :style 'border-radius: ${((size == '')? 20: size)*0.5}px; ${style}'
+    :onclick true
+    :info {info} :valign {valign} :halign {halign} :transition {transition} :duration {duration} :active {active} :tooltip {tooltip} :cursor {cursor} :dragvalue {dragvalue} :dragtype {dragtype}
+    (box
+      :style 'padding: 2px'
+      (overlay
+        (switch_enable :size {(size == '')? 20: size} :status {info.status})
+        (switch_circle :show_on 'off' :size {(size == '')? 20: size} :status {info.status})
+        (switch_circle :show_on 'on' :size {(size == '')? 20: size} :status {info.status}))))
+)
+
+(defwidget cal [info ?width ?height ?valign ?halign ?transition ?duration ?class ?active ?tooltip ?style ?cursor ?dragvalue ?dragtype ?show-details ?show-heading ?show-day-names ?show-week-numbers]
+  (widget
+    :info {info} :class {class} :width {width} :height {height} :valign {valign} :halign {halign} :transition {transition} :duration {duration} :active {active} :tooltip {tooltip} :style {style} :cursor {cursor} :dragvalue {dragvalue} :dragtype {dragtype}
+    (calendar
+      :day {info.day}
+      :month {info.month}
+      :year {info.year}
+      :show-details {(show-details == '')? false: show-details}
+      :show-heading {(show-heading == '')? true: show-heading}
+      :show-day-names {(show-day-names == '')? true: show-day-names}
+      :show-week-numbers {(show-week-numbers == '')? false: show-week-numbers}
+      :onclick 'notify-send "wadectl ${info.id} {2}{1}{0}"'))
+)
+
+(defwidget slider [info ?class ?width ?height ?valign ?halign ?transition ?duration ?active ?tooltip ?style ?cursor ?dragvalue ?dragtype ?flipped ?marks ?draw-value ?orientation]
+  (widget
+    :info {info} :class {class} :width {width} :height {height} :valign {valign} :halign {halign} :transition {transition} :duration {duration} :active {active} :tooltip {tooltip} :style {style} :cursor {cursor} :dragvalue {dragvalue} :dragtype {dragtype}
+    (scale
+      :value {info.value}
+      :onchange 'notify-send "wadectl change ${info.id} {}"'
+      :value {info.value}
+      :flipped {(flipped == '')? false: flipped}
+      :marks {(marks == '')? '': marks}
+      :draw-value {(draw-value == '')? false: draw-value}
+      :round-digits 0
+      :min 0
+      :max 101
+      :orientation {(orientation == '')? 'h': orientation}))
+)
+
+(defwidget progress_bar [info ?class ?width ?height ?valign ?halign ?transition ?duration ?active ?tooltip ?style ?cursor ?dragvalue ?dragtype ?flipped ?orientation]
+  (widget
+    :info {info} :class {class} :width {width} :height {height} :valign {valign} :halign {halign} :transition {transition} :duration {duration} :active {active} :tooltip {tooltip} :style {style} :cursor {cursor} :dragvalue {dragvalue} :dragtype {dragtype}
+    (progress
+      :flipped {(flipped == '')? false: flipped}
+      :orientation {(orientation == '')? 'h': orientation}
+      :value {info.value}))
+)
+
+(defwidget checkbutton [info ?valign ?halign ?transition ?duration ?class ?active ?tooltip ?style ?cursor ?dragvalue ?dragtype ?size]
+  (widget
+    :width {(size == '')? 18: size}
+    :height {(size == '')? 18: size}
+    :class 'checkbutton ${class}'
+    :onclick true
+    :info {info} :valign {valign} :halign {halign} :transition {transition} :duration {duration} :active {active} :tooltip {tooltip} :style {style} :cursor {cursor} :dragvalue {dragvalue} :dragtype {dragtype}
+    (box
+      :style 'padding: 1px;'
+      (overlay
+        (revealer :reveal {info.checked} (box :class 'bg_enable ${class}'))
+        (label :class {class} :text {(info.checked)? '': ''}))))
+)
+

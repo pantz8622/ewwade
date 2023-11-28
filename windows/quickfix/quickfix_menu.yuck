@@ -1,0 +1,278 @@
+(defwidget schedule_quickfix_clock [hour minute second]
+  (box
+    :orientation 'h'
+    :space-evenly false
+    :halign 'center'
+    (label :class 'schedule_quickfix_clock_number' :text {hour})
+    (label :class 'schedule_quickfix_clock_seperator' :text ':')
+    (label :class 'schedule_quickfix_clock_number' :text {minute})
+    (label :class 'schedule_quickfix_clock_seperator' :text ':')
+    (label :class 'schedule_quickfix_clock_number' :text {second}))
+)
+
+(defwidget schedule_quickfix_time [info]
+  (widget
+    :info {info}
+    (box
+      :orientation 'v'
+      :space-evenly false
+      :style 'padding: 5px;'
+      (schedule_quickfix_clock :hour {info.hour} :minute {info.minute} :second {info.second})
+      (label :class 'schedule_quickfix_date' :text {info.date})
+      (schedule_quickfix_weekdaybox :weekday {info.weekday})))
+)
+
+(defwidget schedule_quickfix_weekday [select text]
+  (overlay
+    (revealer
+      :reveal {select}
+      :transition 'crossfade'
+      (box
+        :halign 'center'
+        :valign 'center'
+        :width 32
+        :height 32
+        :class 'schedule_quickfix_weekday'))
+    (label :class '${(select)? "text": "subtext0"}' :style 'font-size: 16px; font-weight: bold;' :text {text}))
+)
+
+(defwidget schedule_quickfix_weekdaybox [weekday]
+  (box
+    :orientation 'h'
+    (schedule_quickfix_weekday :select {weekday == 'Sun'} :text 'S')
+    (schedule_quickfix_weekday :select {weekday == 'Mon'} :text 'M')
+    (schedule_quickfix_weekday :select {weekday == 'Tue'} :text 'T')
+    (schedule_quickfix_weekday :select {weekday == 'Wed'} :text 'W')
+    (schedule_quickfix_weekday :select {weekday == 'Thu'} :text 'T')
+    (schedule_quickfix_weekday :select {weekday == 'Fri'} :text 'F')
+    (schedule_quickfix_weekday :select {weekday == 'Sat'} :text 'S'))
+)
+
+(defwidget schedule_quickfix_weather [time icon temp]
+    (box
+      :orientation 'v'
+      :class 'schedule_quickfix_weather'
+      :style 'padding: 5px'
+      :spacing 5
+      :width 41
+      (label :class 'text' :style 'font-size: 12px' :text {time})
+      (label :class 'text bold' :style 'padding-right: 6px;' :text {icon})
+      (label :class 'text' :style 'font-size: 12px; padding-left: 6px' :text "${temp}°"))
+)
+
+(defwidget schedule_quickfix_weatherbox [info]
+  (widget
+    :info {info}
+    (box
+      :orientation 'h'
+      :space-evenly false
+      :halign 'center'
+      (for i in '[0, 1, 2, 3, 4, 5, 6]'
+        (schedule_quickfix_weather :time {info.time[i]} :icon {info.icon[i]} :temp {info.temp[i]}))))
+)
+
+(defwidget schedule_quickfix_todo [info]
+  (widget
+    :info {info[0]}
+    :class 'schedule_quickfix_todo ${info[0].class}'
+    :transition 'crossfade'
+    :onclick true
+    (box
+      :orientation 'h'
+      :space-evenly false
+      :spacing 10
+      :style 'padding: 5px'
+      (checkbutton :class 'schedule_quickfix_check' :transition 'crossfade' :info {info[1]})
+      (label :halign 'start' :text {info[0].desc})))
+)
+
+(defwidget schedule_quickfix_todolist [content]
+  (scroll
+    :height 200
+    :style 'padding: 10px'
+    (literal :content {content}))
+)
+
+(defwidget schedule_quickfix_schedule [info]
+  (widget
+    :info {info}
+    (box
+      :orientation 'v'
+      :space-evenly false
+      :style 'padding: 10px'
+      (cal
+        :class 'schedule_quickfix_calendar'
+        :width 220
+        :halign 'center'
+        :info {info_ee449e}
+      )
+      (schedule_quickfix_todolist :content {info.todolist})))
+)
+
+(defwidget schedule_quickfix_menu [info]
+  (widget
+    :info {info}
+    :class 'quickfix_menu'
+    :transition 'slidedown'
+    (box
+      :orientation 'v'
+      :space-evenly false
+      :width 300
+      (schedule_quickfix_time :info {info_5c86cb})
+      (quickfix_seperator)
+      (schedule_quickfix_weatherbox :info {info_bc2146})
+      (schedule_quickfix_schedule :info {info_8da5bb})))
+)
+
+(defwidget quickfix_seperator []
+  (box :style 'padding: 5px 10px' (box :height 1 :class 'seperator'))
+)
+
+(defwidget quickfix_list_icon [on icon style]
+  (box
+    :class 'quickfix_list_icon'
+    (overlay
+      (revealer :transition 'crossfade' :reveal {on} (box :class 'bg_blue' :style 'border-radius: 50%;' :width 24 :height 24))
+      (label :class 'text' :style {style} :text {icon})))
+)
+
+(defwidget quickfix_list_entry [info]
+  (widget
+    :info {info}
+    :class 'quickfix_list_entry'
+    :transition 'slidedown'
+    :onclick true
+    (box
+      :orientation 'h'
+      :style 'padding: 4px 8px'
+      (label :halign 'start' :class 'text' :text {info.name})
+      (box :halign 'end' (quickfix_list_icon :on {info.connected} :icon {info.icon} :style {info.icon_style}))))
+)
+
+(defwidget quickfix_list [info]
+  (widget
+    :info {info}
+    (literal :content {info.content}))
+)
+
+(defwidget quickfix_icon [info]
+  (widget
+    :info {info}
+    :class 'quickfix_icon' 
+    :onclick true
+    (label :text {info.icon} :style {info.style}))
+)
+
+(defwidget wifi_quickfix_menu_heading []
+  (box
+    :orientation 'h'
+    :class 'quickfix_heading'
+    (label :class 'text bold' :halign 'start' :text 'WiFi')
+    (box :halign 'end' (switch :info {info_34e1f5} :size 20)))
+)
+
+(defwidget wifi_quickfix_menu [info]
+  (widget
+    :class 'quickfix_menu'
+    :info {info}
+    :transition 'slidedown'
+    (box
+      :orientation 'v'
+      :space-evenly false
+      :width 200
+      (wifi_quickfix_menu_heading)
+      (quickfix_seperator)
+      (quickfix_list :info {info_b3a126})))
+)
+
+(defwidget bluetooth_quickfix_menu_heading []
+  (box
+    :orientation 'h'
+    :class 'quickfix_heading'
+    (label :class 'text bold' :halign 'start' :text 'Bluetooth')
+    (box :halign 'end' (switch :info {info_37a2be} :size 20)))
+)
+
+(defwidget bluetooth_quickfix_menu [info]
+  (widget
+    :info {info}
+    :class 'quickfix_menu'
+    :transition 'slidedown'
+    (box
+      :orientation 'v'
+      :space-evenly false
+      :width 200
+      (bluetooth_quickfix_menu_heading)
+      (quickfix_seperator)
+      (quickfix_list :info {info_661e88})))
+)
+
+(defwidget sound_quickfix_menu_heading []
+  (box
+    :orientation 'v'
+    :class 'quickfix_heading'
+    (box
+      :orientation 'h'
+      :space-evenly false
+      (label :class 'text bold' :halign 'start' :text 'Sound')
+      (box :width 30 (quickfix_icon :info {info_4819c1})))
+    (slider :class 'quickfix_scale' :info {info_332199}))
+)
+
+(defwidget sound_quickfix_menu [info]
+  (widget
+    :info {info}
+    :class 'quickfix_menu'
+    :transition 'slidedown'
+    (box
+      :orientation 'v'
+      :space-evenly false
+      :width 200
+      (sound_quickfix_menu_heading)
+      (quickfix_seperator)
+      (quickfix_list :info {info_2ec219})))
+)
+
+(defwidget batrery_quickfix_menu_heading []
+  (box
+    :orientation 'v'
+    :class 'quickfix_heading'
+    (label :class 'text bold' :halign 'start' :text 'Battery')
+    (progress_bar :class 'quickfix_progress' :info {info_37346a}))
+)
+
+(defwidget batrery_quickfix_menu [info]
+  (widget
+    :info {info}
+    :class 'quickfix_menu'
+    :transition 'slidedown'
+    (box
+      :orientation 'v'
+      :width 150
+      (batrery_quickfix_menu_heading)))
+)
+
+(defwidget quickfix_menu []
+  (box
+    :orientation 'v'
+    :space-evenly false
+    (schedule_quickfix_menu :info {info_3cbb4f})
+    (wifi_quickfix_menu :info {info_38926e})
+    (bluetooth_quickfix_menu :info {info_5ded1e})
+    (sound_quickfix_menu :info {info_86af86})
+    (batrery_quickfix_menu :info {info_695538}))
+)
+
+(defwindow quickfix_menu
+  :monitor 1
+  :geometry (geometry
+              :x '10px'
+              :y '0px'
+              :width '0px'
+              :height '0px'
+              :anchor 'left top')
+  :stacking 'fg'
+  :focusable false
+  :exclusive false
+  (quickfix_menu)
+)
